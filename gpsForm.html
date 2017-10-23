@@ -51,12 +51,15 @@
   <script>
     var map = L.map('map'); //Initialize the map
 
-    var formId = '16STwYXF3ugLVCjoxc4fYxufwB59A-pc2TZqkyHp-BxE';
+    //var formId = '1FAIpQLSctJxZ4VJKT6jPAQ533ZwFkzaQ1htGInrybT6IF_GhAUTP1dw';
+	var formId = '16STwYXF3ugLVCjoxc4fYxufwB59A-pc2TZqkyHp-BxE';
     // kampus diponegoro UKSW
     var formLat = '268809767';
     var formLng = '967578188';
     var formText = '1109030115';
+    var formHa = '998968978';
     var gsheet = '1otczsfiy6G9ANbEqM8rmkpYSeAMnEE-tyTAOOGrXJR8';
+	
 
     //Add a basemap
     var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -84,7 +87,7 @@
       lat = e.latlng.lat;
       lng = e.latlng.lng;
 
-      var form = '<div id="formdiv"><form role="form" id="projectform"><div class="form-group"><div class="form-group"><label for="description" class="requiredField">GPS Collection Form</label><textarea class="form-control" rows="3" id="descrip" placeholder="Text input..."></textarea></div><em class="text-muted">Click submit to add a point at this location.</em><div id="formHelp"></div><hr /><button type="submit" id="submit" class="btn btn-default btn-sm">Submit</button></form></div>';
+      var form = '<div id="formdiv"><form role="form" id="projectform"><div class="form-group"><div class="form-group"><label for="description" class="requiredField">GPS Collection Form</label><textarea class="form-control" rows="2" id="descrip" placeholder="Input Location..."></textarea></div><div id="formHelp"></div><hr /><textarea class="form-control" rows="1" id="hektar" placeholder="Input Ha.."></textarea></div> <em class="text-muted">Click submit to add Information at this location.</em> <div id="formHelp2"></div><hr /> <button type="submit" id="submit" class="btn btn-default btn-sm">Submit</button></form></div>';
 
       if (e.accuracy) {
         var radius = (e.accuracy / 2) * 3.28084;
@@ -92,7 +95,9 @@
       }
       marker = L.marker(e.latlng).addTo(map)
       .bindPopup(form, {maxWidth:400});
-
+	  
+	 // source code dari orm baru
+	 
       //if you try and open the popup right away the location may not be ready, eventhough it's firing after locationfound
       setTimeout(function() {
         marker.openPopup();
@@ -103,14 +108,22 @@
         $('#projectform').submit(function(event) {
             event.preventDefault();
             var descrip = $('#descrip').val();
+            var hectar = $('#hektar').val();
             //console.log(descrip);
             if (descrip) {
               //console.log(descrip);
-              $('#formdiv').html('<iframe src="https://docs.google.com/forms/d/' + formId + '/formResponse?entry.' + formLat + '=' + lat + '&entry.' + formLng + '=' + lng + '&entry.'+ formText + '=' + descrip + '&submit=Submit" seamless scrolling="no" style="overflow:hidden;height:375px;border:lightgray solid thin;"></iframe>');
+              $('#formdiv').html('<iframe src="https://docs.google.com/forms/d/' + formId + '/formResponse?entry.' + formLat + '=' + lat + '&entry.' + formLng + '=' + lng + '&entry.'+ formText + '=' + descrip + '&entry.'+ formHa + '=' + hectar + '&submit=Submit" seamless scrolling="no" style="overflow:hidden;height:375px;border:lightgray solid thin;"></iframe>');
+			  
+              // ORI 
+			  //('#formdiv').html('<iframe src="https://docs.google.com/forms/d/' + formId + '/formResponse?entry.' + formLat + '=' + lat + '&entry.' + formLng + '=' + lng + '&entry.'+ formText + '=' + descrip + '&submit=Submit" seamless scrolling="no" style="overflow:hidden;height:375px;border:lightgray solid thin;"></iframe>');
             } else {
               $('#formHelp').html('<span style="color:red;">Please enter a description of your point.</span>')
+		    //$('#formdiv').html('<iframe src="https://docs.google.com/forms/d/' + formId + '/formResponse?entry.' + formLat + '=' + lat + '&entry.' + formLng + '=' + lng + + '&entry.'+ formText + '=' + descrip + '&entry.' + formText + '=' + hektar + '&submit=Submit" seamless scrolling="no" style="overflow:hidden;height:375px;border:lightgray solid thin;"></iframe>');
+		    //<textarea class="form-control" rows="2" id="descrip" placeholder="Input Location..."></textarea></div><div id="formHelp"></div><hr /><textarea class="form-control" rows="1" id="hektar" placeholder="Input Ha.."></textarea></div> <em class="text-muted">Click submit to add Information at this location.</em> <div id="formHelp2"></div><hr /> <button type="submit" id="submit" class="btn btn-default btn-sm">Submit</button></form></div>';
+  		    //<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSctJxZ4VJKT6jPAQ533ZwFkzaQ1htGInrybT6IF_GhAUTP1dw/viewform?embedded=true" width="760" height="500" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
             }
           });
+
       });
       if (marker) {
         marker.on('popupclose', function() {
